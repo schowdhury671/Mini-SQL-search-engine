@@ -1,54 +1,54 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jan 18 16:13:34 2018
-
-@author: Sanjoy
 """
 from __future__ import print_function
 import os
 import sys
 import copy
 from collections import OrderedDict
+#insert current directory path
 sys.path.insert(0,os.getcwd() + "sqlparse")
 import sqlparse
 def fileExists(t):
     return os.path.isfile(t + '.csv')
-
+#function to load metadata:-
 def loadMetadata(db_dict):
     m_file = open('metadata.txt', 'r');
     tab = False
-    for content in m_file:
-        if content.strip() == '<begin_table>':
+    #parse through the content of metadata.txt
+    for line in m_file:
+        if line.strip() == '<begin_table>':
             tab = True #Indicates the next line is a table name
             attr_names = []
             continue
         if tab:
             tab = False
-            tab_name = content.strip()
-            db_dict[content.strip()] = []
+            tab_name = line.strip()
+            db_dict[line.strip()] = []
             continue
-        if content.strip() == '<end_table>':
+        if line.strip() == '<end_table>':
             continue
 
-        db_dict[tab_name].append(content.strip())
+        db_dict[tab_name].append(line.strip())
 
     #Delete the tables from dictionary whose file doesn't exist
     for table in db_dict:
         if fileExists(table) == False:
             del db_dict[table]
             # print table + ".csv doesn't exist"
-
+#extract values from the csv file if it exists
 def extract_from_csv(table):
     table = table + '.csv'
-    rw = []
+    mylist = []
     try:
         fp = open(table, 'r').readlines()
     except:
         raise NotImplementedError('Data cannot be loaded since table ' + tbl + ' does not exist')
 
     for r in fp:
-        rw.append(r.rstrip("\r\n"))
-    return rw
+        mylist.append(r.rstrip("\r\n"))
+    return mylist
 
 #Load meta data
 metadata_dict = OrderedDict()
@@ -107,7 +107,7 @@ def agg_func(func, tbl, col_name):
 def distinct_values(tbl, col_to_be_printed):
     for i in col_to_be_printed:
         if '(' in i:
-            raise Exception("Invalid syntax")
+            raise Exception("Given syntax is not valid")
     table1 = OrderedDict()
     #Initialise blank table
     for cols in col_to_be_printed:
@@ -206,23 +206,23 @@ def showOutput(new_tbl, f_tbl, copied_tbl, conj, c_lst, distinct):
         # break
     print()
 
-def check_condition(a, b, operator):
-    if operator == '=':
+def check_condition(a, b, comparator):
+    if comparator == '=':
         return a == b
-    elif operator == '<':
+    elif comparator == '<':
         return a < b
-    elif operator == '<=':
+    elif comparator == '<=':
         return a <= b
-    elif operator == '>':
+    elif comparator == '>':
         return a > b
-    elif operator == '>=':
+    elif comparator == '>=':
         return a >= b
     else:
         raise NotImplementedError('operator ' + str(op) + ' is invalid')
 
-
 def main():
     given_query = sys.argv[1]
+
     #Tokenise the query
     query = sqlparse.parse(given_query)[0]
     query_tokens = query.tokens
@@ -362,6 +362,3 @@ def main():
             raise Exception('Syntax is not valid')
     else:
         print ("Only SELECT is supported")
-
-if __name__ == "__main__":
-    main()
