@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jan 18 16:13:34 2018
-
-@author: Sanjoy
 """
 from __future__ import print_function
 import os
 import sys
 import copy
 from collections import OrderedDict
+#insert current directory path
 sys.path.insert(0,os.getcwd() + "sqlparse")
 import sqlparse
 def fileExists(t):
     return os.path.isfile(t + '.csv')
-
+#function to load metadata
 def loadMetadata(db_dict):
     m_file = open('metadata.txt', 'r');
     tab = False
@@ -37,7 +36,7 @@ def loadMetadata(db_dict):
         if fileExists(table) == False:
             del db_dict[table]
             # print table + ".csv doesn't exist"
-
+#extract values from the csv file if it exists
 def extract_from_csv(table):
     table = table + '.csv'
     rw = []
@@ -219,8 +218,7 @@ def check_condition(a, b, operator):
     else:
         raise NotImplementedError('operator ' + str(op) + ' is invalid')
 
-
-def main():
+if __name__ == '__main__':
     cmd_query = sys.argv[1]
     #Tokenise the query
     query = sqlparse.parse(cmd_query)[0]
@@ -361,6 +359,3 @@ def main():
             raise Exception('Syntax is not valid')
     else:
         print ("Only SELECT is supported")
-
-if __name__ == "__main__":
-    main()
