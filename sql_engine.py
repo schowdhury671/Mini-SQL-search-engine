@@ -40,15 +40,15 @@ def loadMetadata(db_dict):
 #extract values from the csv file if it exists
 def extract_from_csv(table):
     table = table + '.csv'
-    rw = []
+    mylist = []
     try:
         fp = open(table, 'r').readlines()
     except:
         raise NotImplementedError('Data cannot be loaded since table ' + tbl + ' does not exist')
 
     for r in fp:
-        rw.append(r.rstrip("\r\n"))
-    return rw
+        mylist.append(r.rstrip("\r\n"))
+    return mylist
 
 #Load meta data
 metadata_dict = OrderedDict()
@@ -106,7 +106,7 @@ def agg_func(func, tbl, col_name):
 def distinct_values(tbl, col_to_be_printed):
     for i in col_to_be_printed:
         if '(' in i:
-            raise Exception("Invalid syntax")
+            raise Exception("Given syntax is not valid")
     table1 = OrderedDict()
     #Initialise blank table
     for cols in col_to_be_printed:
@@ -205,16 +205,16 @@ def showOutput(new_tbl, f_tbl, copied_tbl, conj, c_lst, distinct):
         # break
     print()
 
-def check_condition(a, b, operator):
-    if operator == '=':
+def check_condition(a, b, comparator):
+    if comparator == '=':
         return a == b
-    elif operator == '<':
+    elif comparator == '<':
         return a < b
-    elif operator == '<=':
+    elif comparator == '<=':
         return a <= b
-    elif operator == '>':
+    elif comparator == '>':
         return a > b
-    elif operator == '>=':
+    elif comparator == '>=':
         return a >= b
     else:
         raise NotImplementedError('operator ' + str(op) + ' is invalid')
