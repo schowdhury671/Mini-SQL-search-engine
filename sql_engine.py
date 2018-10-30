@@ -12,7 +12,7 @@ sys.path.insert(0,os.getcwd() + "sqlparse")
 import sqlparse
 def fileExists(t):
     return os.path.isfile(t + '.csv')
-#function to load metadata
+#function to load metadata:-
 def loadMetadata(db_dict):
     m_file = open('metadata.txt', 'r');
     tab = False
@@ -66,6 +66,7 @@ for tbl in metadata_dict:
 for tbl in metadata_dict:
     db_rows = []
     db_rows = extract_from_csv(tbl)
+    
     for row in db_rows:
         row = row.split(',')
         for i in range(len(row)):
@@ -125,7 +126,7 @@ def distinct_values(tbl, col_to_be_printed):
 
     # print (table1)
     return table1
-
+#function used to display the output
 def showOutput(new_tbl, f_tbl, copied_tbl, conj, c_lst, distinct):
     #First make new_tbl as per the conditions
     if str(conj).upper() == 'OR':
@@ -219,16 +220,17 @@ def check_condition(a, b, comparator):
     else:
         raise NotImplementedError('operator ' + str(op) + ' is invalid')
 
-if __name__ == '__main__':
-    cmd_query = sys.argv[1]
+def main():
+    given_query = sys.argv[1]
+
     #Tokenise the query
-    query = sqlparse.parse(cmd_query)[0]
+    query = sqlparse.parse(given_query)[0]
     query_tokens = query.tokens
     distinct = False
     if(str(query_tokens[2]).upper() == 'DISTINCT'):
         distinct = True
         new_query = ""
-        for i in cmd_query.split():
+        for i in given_query.split():
             if str(i).upper() != 'DISTINCT':
                 new_query += i
                 new_query += " "
