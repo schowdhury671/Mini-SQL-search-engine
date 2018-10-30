@@ -16,20 +16,21 @@ def fileExists(t):
 def loadMetadata(db_dict):
     m_file = open('metadata.txt', 'r');
     tab = False
-    for content in m_file:
-        if content.strip() == '<begin_table>':
+    #parse through the content of metadata.txt
+    for line in m_file:
+        if line.strip() == '<begin_table>':
             tab = True #Indicates the next line is a table name
             attr_names = []
             continue
         if tab:
             tab = False
-            tab_name = content.strip()
-            db_dict[content.strip()] = []
+            tab_name = line.strip()
+            db_dict[line.strip()] = []
             continue
-        if content.strip() == '<end_table>':
+        if line.strip() == '<end_table>':
             continue
 
-        db_dict[tab_name].append(content.strip())
+        db_dict[tab_name].append(line.strip())
 
     #Delete the tables from dictionary whose file doesn't exist
     for table in db_dict:
