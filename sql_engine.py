@@ -2,6 +2,7 @@
 """
 Created on Thu Jan 18 16:13:34 2018
 """
+import numpy as np
 from __future__ import print_function
 import os
 import sys
