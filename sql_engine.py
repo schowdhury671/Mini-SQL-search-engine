@@ -9,6 +9,7 @@ import sys
 import copy
 from collections import OrderedDict
 #insert current directory path
+#adding comment
 sys.path.insert(0,os.getcwd() + "sqlparse")
 import sqlparse
 def fileExists(t):
