@@ -17,6 +17,7 @@ def fileExists(t):
     return os.path.isfile(t + '.csv')
 #function to load metadata:-
 def loadMetadata(db_dict):
+    #opening file
     m_file = open('metadata.txt', 'r');
     tab = False
     #parse through the content of metadata.txt
