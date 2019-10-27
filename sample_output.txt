@@ -1,3 +1,5 @@
+Some sample output:
+
 
 1. Select * from table2;
 
